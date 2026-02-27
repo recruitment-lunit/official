@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lunit — 오시는 길</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
+  :root { --blue:#00C2FF; --black:#0a0a0a; --gray:#888; --light:#f7f8fa; --border:#e8e8e8; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { font-family:'Inter','Apple SD Gothic Neo',sans-serif; background:#fff; color:var(--black); }
+
+  /* HEADER */
+  header {
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background:rgba(255,255,255,0.95); backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 48px; height:64px;
+  }
+  .logo { font-size:18px; font-weight:900; letter-spacing:3px; color:var(--black); text-decoration:none; }
+  .header-tag { font-size:11px; font-weight:600; color:var(--gray); letter-spacing:2px; text-transform:uppercase; }
+
+  /* HERO */
+  .hero {
+    margin-top:64px; background:var(--black); padding:100px 48px 80px;
+    position:relative; overflow:hidden;
+  }
+  .hero::before {
+    content:''; position:absolute; top:-100px; right:-100px;
+    width:500px; height:500px;
+    background:radial-gradient(circle,rgba(0,194,255,.15) 0%,transparent 70%);
+    pointer-events:none;
+  }
+  .hero h1 { font-size:clamp(36px,6vw,64px); font-weight:900; color:#fff; line-height:1.1; margin-bottom:12px; letter-spacing:-1px; }
+  .hero-sub { font-size:15px; color:#6a8ca8; margin-top:16px; line-height:1.7; }
+  .hero-divider { width:40px; height:3px; background:var(--blue); margin:32px 0; }
+  .hero-desc { font-size:13px; color:#aaa; line-height:1.8; max-width:480px; }
+
+  /* SECTION */
+  section { padding:80px 48px; }
+  section:nth-child(even) { background:var(--light); }
+  .section-header { margin-bottom:48px; }
+  .section-label { font-size:11px; font-weight:700; letter-spacing:3px; color:var(--blue); text-transform:uppercase; margin-bottom:12px; }
+  .section-title { font-size:28px; font-weight:800; color:var(--black); line-height:1.2; }
+  .section-title-en { font-size:14px; font-weight:400; color:var(--gray); margin-top:6px; }
+
+  /* ADDRESS */
+  .address-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  @media(max-width:640px){ .address-grid { grid-template-columns:1fr; } }
+
+  .address-main {
+    background:var(--black); border-radius:20px; padding:40px;
+    position:relative; overflow:hidden;
+  }
+  .address-main::after {
+    content:''; position:absolute; bottom:-60px; right:-60px;
+    width:200px; height:200px;
+    background:radial-gradient(circle,rgba(0,194,255,.2) 0%,transparent 70%);
+  }
+  .addr-label { font-size:11px; letter-spacing:2px; color:var(--blue); font-weight:600; text-transform:uppercase; margin-bottom:20px; }
+  .address-main h3 { font-size:22px; font-weight:800; color:#fff; margin-bottom:6px; }
+  .address-main .addr-en-sub { font-size:13px; color:#6a8ca8; margin-bottom:20px; }
+  .address-main .addr-ko { font-size:15px; color:#fff; line-height:1.8; font-weight:500; }
+  .address-main .addr-en-full { font-size:13px; color:#6a8ca8; line-height:1.8; margin-top:4px; }
+  .address-btns { display:flex; gap:10px; margin-top:28px; flex-wrap:wrap; }
+  .btn {
+    display:inline-flex; align-items:center; gap:6px;
+    padding:11px 20px; border-radius:8px;
+    font-size:13px; font-weight:700; text-decoration:none; transition:all .2s;
+  }
+  .btn-blue { background:var(--blue); color:#000; }
+  .btn-blue:hover { background:#00aadd; }
+  .btn-outline { background:transparent; color:#fff; border:1.5px solid #333; }
+  .btn-outline:hover { border-color:var(--blue); color:var(--blue); }
+
+  .address-info {
+    background:#fff; border-radius:20px; padding:40px;
+    border:1.5px solid var(--border);
+    display:flex; flex-direction:column; justify-content:space-between;
+  }
+  .info-row { display:flex; flex-direction:column; gap:4px; }
+  .info-row .lbl { font-size:11px; font-weight:700; letter-spacing:2px; color:var(--blue); text-transform:uppercase; }
+  .info-row .val { font-size:15px; font-weight:600; color:var(--black); }
+  .info-row .val-en { font-size:13px; color:var(--gray); margin-top:2px; }
+  .info-row a { text-decoration:none; color:inherit; transition:color .2s; }
+  .info-row a:hover { color:var(--blue); }
+  .divider-line { height:1px; background:var(--border); }
+
+  /* NOTICE */
+  .notice-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media(max-width:640px){ .notice-grid { grid-template-columns:1fr; } }
+  .notice-item {
+    background:#fff; border-radius:16px; padding:28px;
+    border:1.5px solid var(--border);
+    display:flex; gap:16px; align-items:flex-start;
+    transition:border-color .2s, transform .2s;
+  }
+  .notice-item:hover { border-color:var(--blue); transform:translateY(-2px); }
+  .notice-icon {
+    width:36px; height:36px; background:rgba(0,194,255,.1);
+    border-radius:10px; display:flex; align-items:center; justify-content:center;
+    font-size:16px; flex-shrink:0;
+  }
+  .notice-text .ko { font-size:14px; font-weight:600; color:var(--black); line-height:1.6; }
+  .notice-text .en { font-size:13px; color:var(--gray); line-height:1.6; margin-top:6px; }
+
+  /* TABS */
+  .tab-nav { display:flex; gap:0; margin-bottom:32px; border-bottom:2px solid var(--border); flex-wrap:wrap; }
+  .tab-btn {
+    padding:14px 28px; font-size:13px; font-weight:700;
+    background:none; border:none; cursor:pointer; color:var(--gray);
+    border-bottom:2px solid transparent; margin-bottom:-2px; transition:all .2s;
+  }
+  .tab-btn.active { color:var(--black); border-bottom-color:var(--black); }
+  .tab-pane { display:none; }
+  .tab-pane.active { display:block; }
+
+  /* PHOTO STEPS */
+  .steps { display:flex; flex-direction:column; gap:20px; }
+  .step {
+    display:grid; grid-template-columns:1fr 1fr;
+    border-radius:20px; overflow:hidden; border:1.5px solid var(--border);
+  }
+  .step:nth-child(even) { direction:rtl; }
+  .step:nth-child(even) > * { direction:ltr; }
+  .step-img { width:100%; height:280px; object-fit:cover; display:block; }
+  .step-info {
+    padding:36px 40px; display:flex; flex-direction:column; justify-content:center;
+    background:#fff; gap:12px;
+  }
+  .step:nth-child(even) .step-info { background:var(--black); }
+  .step-num { font-size:48px; font-weight:900; color:rgba(0,194,255,.15); line-height:1; margin-bottom:4px; }
+  .step:nth-child(even) .step-num { color:rgba(0,194,255,.2); }
+  .step-ko { font-size:16px; font-weight:700; color:var(--black); line-height:1.6; }
+  .step:nth-child(even) .step-ko { color:#fff; }
+  .step-en { font-size:13px; color:var(--gray); line-height:1.7; margin-top:4px; }
+  .step:nth-child(even) .step-en { color:#6a8ca8; }
+  @media(max-width:640px){
+    .step { grid-template-columns:1fr; direction:ltr !important; }
+    .step-img { height:220px; }
+    .step-info { padding:24px; }
+  }
+
+  /* PARKING */
+  .parking-card {
+    background:#fff; border-radius:16px; padding:32px;
+    border:1.5px solid var(--border);
+  }
+  .tag {
+    display:inline-block; background:rgba(0,194,255,.12); color:var(--blue);
+    font-size:11px; font-weight:700; padding:4px 10px; border-radius:6px;
+    letter-spacing:1px; margin-bottom:14px;
+  }
+  .parking-table { width:100%; border-collapse:collapse; }
+  .parking-table th {
+    text-align:left; font-size:11px; font-weight:700; letter-spacing:2px;
+    color:var(--gray); text-transform:uppercase; padding:0 0 12px;
+    border-bottom:1.5px solid var(--border);
+  }
+  .parking-table td { padding:16px 0; border-bottom:1px solid var(--border); vertical-align:top; }
+  .parking-table tr:last-child td { border-bottom:none; }
+  .name-ko { font-size:14px; font-weight:700; color:var(--black); }
+  .name-en { font-size:12px; color:var(--gray); margin-top:2px; }
+  .addr-ko { font-size:13px; color:#444; }
+  .addr-en-td { font-size:12px; color:var(--gray); margin-top:2px; }
+  .fee { font-size:14px; font-weight:700; color:var(--blue); white-space:nowrap; }
+  .map-links { display:flex; flex-direction:column; gap:4px; }
+  .map-link {
+    font-size:12px; font-weight:600; text-decoration:none; padding:4px 10px;
+    border-radius:6px; display:inline-flex; align-items:center; gap:4px;
+    transition:all .2s; width:fit-content;
+  }
+  .map-link.naver { background:#03C75A; color:#fff; }
+  .map-link.naver:hover { background:#02a84c; }
+  .map-link.google { background:#4285F4; color:#fff; }
+  .map-link.google:hover { background:#2a6de0; }
+  .parking-note { font-size:12px; color:var(--gray); margin-top:16px; line-height:1.6; }
+
+  .warning-box {
+    background:#fff8e1; border-left:3px solid #ffc107;
+    border-radius:0 10px 10px 0; padding:16px 20px; margin-top:16px;
+  }
+  .warning-box p { font-size:13px; color:#5a4000; line-height:1.7; }
+  .warning-box .en { font-size:12px; color:#8a7040; margin-top:4px; }
+
+  .info-box {
+    background:#fff; border-radius:16px; padding:32px;
+    border:1.5px solid var(--border); margin-bottom:12px;
+  }
+  .info-box h4 { font-size:16px; font-weight:800; margin-bottom:10px; }
+  .info-box.dark { background:var(--black); border-color:var(--black); }
+  .info-box.dark h4 { color:#fff; }
+  .info-box.dark p { color:#aaa; }
+
+  /* FOOTER */
+  footer {
+    background:var(--black); padding:40px 48px;
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;
+  }
+  footer .f-logo { font-size:16px; font-weight:900; letter-spacing:3px; color:#fff; }
+  footer p { font-size:12px; color:#555; }
+
+  @media(max-width:768px){
+    header { padding:0 24px; }
+    .hero { padding:80px 24px 60px; }
+    section { padding:60px 24px; }
+    footer { padding:32px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a class="logo" href="#">LUNIT</a>
+  <span class="header-tag">How to get to Lunit's office</span>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>오시는 길</h1>
+  <div class="hero-sub">Directions</div>
+  <div class="hero-divider"></div>
+  <p class="hero-desc">
+    안녕하세요! Lunit의 Talent Acquisition Team입니다.<br>
+    회사까지 안전하게 오시길 바라는 마음에서 몇가지 안내드립니다.<br>
+    <span style="color:#556a7a">Hello! This is Lunit's Talent Acquisition Team.<br>
+    We are here to help you get here safely.</span>
+  </p>
+</div>
+
+<!-- ADDRESS -->
+<section id="address">
+  <div class="section-header">
+    <div class="section-label">Location</div>
+    <div class="section-title">주소 및 연락처</div>
+    <div class="section-title-en">Address & Contact Information</div>
+  </div>
+  <div class="address-grid">
+    <div class="address-main">
+      <div class="addr-label">Lunit Inc.</div>
+      <h3>루닛 본사</h3>
+      <div class="addr-en-sub">Seoul Headquarters</div>
+      <div class="addr-ko">서울특별시 강남구 강남대로 374<br>K-Square 2 빌딩 · <strong style="color:var(--blue)">5층</strong></div>
+      <div class="addr-en-full">374, Gangnam-daero, Gangnam-gu, Seoul<br>K-Square 2 · <span style="color:var(--blue)">5th Floor</span></div>
+      <div class="address-btns">
+        <a class="btn btn-blue" href="https://map.naver.com/v5/search/강남구 강남대로 374" target="_blank">🗺 네이버 지도</a>
+        <a class="btn btn-outline" href="https://maps.google.com/?q=강남구+강남대로+374" target="_blank">📍 Google Maps</a>
+      </div>
+    </div>
+    <div class="address-info">
+      <div class="info-row">
+        <div class="lbl">Building</div>
+        <div class="val">K-Square 2 · 5층</div>
+        <div class="val-en">374, Gangnam-daero, Gangnam-gu · 5th Floor</div>
+      </div>
+      <div class="divider-line"></div>
+      <div class="info-row">
+        <div class="lbl">Phone</div>
+        <div class="val"><a href="tel:07041612253">070-4161-2253</a></div>
+      </div>
+      <div class="divider-line"></div>
+      <div class="info-row">
+        <div class="lbl">Email</div>
+        <div class="val"><a href="mailto:recruitment@lunit.io">recruitment@lunit.io</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NOTICE -->
+<section id="notice">
+  <div class="section-header">
+    <div class="section-label">Please Note</div>
+    <div class="section-title">방문 전 확인하세요</div>
+    <div class="section-title-en">Important Information Before You Arrive</div>
+  </div>
+  <div class="notice-grid">
+    <div class="notice-item">
+      <div class="notice-icon">⏰</div>
+      <div class="notice-text">
+        <div class="ko">원활한 면접을 위해 5분 전까지 5층에 도착해 주세요. 도착 후 전화 부탁드립니다.</div>
+        <div class="en">Please be on the 5th floor at least 5 minutes before your interview and call us when you arrive.</div>
+      </div>
+    </div>
+    <div class="notice-item">
+      <div class="notice-icon">📞</div>
+      <div class="notice-text">
+        <div class="ko">늦게 되거나 참석이 어려우신 경우 전화·이메일로 미리 연락 부탁드립니다. 이외 문의 사항이 있으신 경우에도 편하게 연락해 주세요.</div>
+        <div class="en">If you are delayed or cannot attend, please contact us by phone or email. Feel free to reach out with any questions.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRANSPORT -->
+<section id="transport">
+  <div class="section-header">
+    <div class="section-label">Directions</div>
+    <div class="section-title">교통편 안내</div>
+    <div class="section-title-en">Getting Here</div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="showTab('subway',this)">🚇 지하철 · Subway</button>
+    <button class="tab-btn" onclick="showTab('car',this)">🚘 자가용 · By Car</button>
+    <button class="tab-btn" onclick="showTab('parking',this)">🅿️ 주변 주차장 · Nearby Parking</button>
+  </div>
+
+  <!-- SUBWAY: 총 3단계 -->
+  <div id="tab-subway" class="tab-pane active">
+    <div class="steps">
+      <div class="step">
+        <img class="step-img" src="subway1.webp" alt="강남역 출구">
+        <div class="step-info">
+          <div class="step-num">01</div>
+          <div class="step-ko">강남역 신분당선 3번 또는 4번 출구로 나와 크리스피크림 도넛 방향으로 직진해주세요.<br>건물 외부 조형물(고양이 형상)이 보입니다.</div>
+          <div class="step-en">Exit through Exit 3 or 4 of Gangnam Station (Shinbundang Line) and Walk straight toward Krispy Kreme.<br>You'll see a cat-shaped sculpture outside the building.</div>
+        </div>
+      </div>
+      <div class="step">
+        <img class="step-img" src="subway2.webp" alt="크리스피크림 방향">
+        <div class="step-info">
+          <div class="step-num">02</div>
+          <div class="step-ko">건물 외부 조형물(고양이 형상)이 보입니다.</div>
+          <div class="step-en">.You'll see a cat-shaped sculpture outside the building.</div>
+        </div>
+      </div>
+      <div class="step">
+        <img class="step-img" src="subway4.webp" alt="엘리베이터">
+        <div class="step-info">
+          <div class="step-num">03</div>
+          <div class="step-ko"><strong style="color:var(--blue)">하늘색으로 표시된 엘리베이터 2대</strong>를 이용해 5층으로 올라오세요.</div>
+          <div class="step-en">Take one of the <strong style="color:var(--blue)">two elevators highlighted in blue</strong> up to the 5th floor.</div>
+        </div>
+      </div>
+    </div>
+    <div style="background:rgba(0,194,255,.08);border-radius:12px;padding:16px 20px;margin-top:20px;border:1px solid rgba(0,194,255,.2);">
+      <p style="font-size:13px;color:#444;">♿ <strong>장애인용 화장실</strong>은 로비층에 있습니다. &nbsp;<span style="color:var(--gray)">The accessible restroom is located on the lobby floor.</span></p>
+    </div>
+  </div>
+
+  <!-- CAR: 총 3단계 -->
+  <div id="tab-car" class="tab-pane">
+    <div class="steps">
+      <div class="step">
+        <img class="step-img" src="car1.webp" alt="주차장 입구">
+        <div class="step-info">
+          <div class="step-num">01</div>
+          <div class="step-ko">K-Square 2 주차장 입구로 진입하세요.</div>
+          <div class="step-en">Enter the K-Square 2 parking lot.</div>
+        </div>
+      </div>
+      <div class="step">
+        <img class="step-img" src="car2.webp" alt="주차 후 출구">
+        <div class="step-info">
+          <div class="step-num">02</div>
+          <div class="step-ko">주차 후 옆 출입문을 통해 건물 내부로 이동하세요.</div>
+          <div class="step-en">After parking, enter the building through the side door.</div>
+        </div>
+      </div>
+      <div class="step">
+        <img class="step-img" src="car3.webp" alt="엘리베이터">
+        <div class="step-info">
+          <div class="step-num">03</div>
+          <div class="step-ko"><strong style="color:var(--blue)">하늘색으로 표시된 엘리베이터 2대</strong>만 5층으로 운행합니다.<br>해당 엘리베이터를 이용해주세요.</div>
+          <div class="step-en">Only the <strong style="color:var(--blue)">two elevators marked in blue</strong> go to the 5th floor. Please use those elevators.</div>
+        </div>
+      </div>
+    </div>
+    <div class="warning-box" style="margin-top:20px;">
+      <p>⚠️ 중량 <strong>2.2T 이상</strong> / 전장 <strong>5.3M 이상</strong> 차량은 기계식 주차장 이용이 불가합니다. 요금: <strong>1시간 6,000원</strong></p>
+      <p class="en">Vehicles over 2.2T or 5.3M cannot use the mechanical parking lot. Fee: KRW 6,000 / hour.</p>
+    </div>
+  </div>
+
+  <!-- NEARBY PARKING -->
+  <div id="tab-parking" class="tab-pane">
+    <div class="parking-card">
+      <div class="tag">NEARBY PARKING</div>
+      <h4 style="font-size:16px;font-weight:800;margin-bottom:20px;">주변 주차장</h4>
+      <table class="parking-table">
+        <thead>
+          <tr>
+            <th style="width:28%">주차장</th>
+            <th style="width:30%">주소</th>
+            <th style="width:14%">요금</th>
+            <th style="width:28%">지도</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="name-ko">비전타워</div>
+              <div class="name-en">Vision Tower</div>
+            </td>
+            <td>
+              <div class="addr-ko">테헤란로 2길 27</div>
+              <div class="addr-en-td">27, Teheran-ro 2-gil</div>
+            </td>
+            <td><div class="fee">₩6,000/hr</div></td>
+            <td>
+              <div class="map-links">
+                <a class="map-link naver" href="https://naver.me/GtJSI0GR" target="_blank">🗺 네이버 지도</a>
+                <a class="map-link google" href="https://maps.app.goo.gl/Fd2Qj4dBLAw6JFgB7" target="_blank">📍 Google Maps</a>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="name-ko">한라클래식</div>
+              <div class="name-en">Halla Classic</div>
+            </td>
+            <td>
+              <div class="addr-ko">강남대로84길 23</div>
+              <div class="addr-en-td">23, Gangnam-daero 84-gil</div>
+            </td>
+            <td><div class="fee">₩4,000/hr</div></td>
+            <td>
+              <div class="map-links">
+                <a class="map-link naver" href="https://naver.me/xs3Vrsdl" target="_blank">🗺 네이버 지도</a>
+                <a class="map-link google" href="https://maps.app.goo.gl/121knNDpWjm5Sh6x7" target="_blank">📍 Google Maps</a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="parking-note">※ 실제 금액과 차이가 있을 수 있으니 별도 확인 부탁드립니다.<br>
+      <span style="color:#aaa">Actual parking fees may differ. Please double-check before visiting.</span></p>
+    </div>
+  </div>
+
+</section>
+
+<footer>
+  <div class="f-logo">LUNIT</div>
+  <p>© 2025 Lunit Inc. · AI-Powered Cancer Care</p>
+</footer>
+
+<script>
+  function showTab(name, el) {
+    document.querySelectorAll('.tab-pane').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    el.classList.add('active');
+  }
+</script>
+</body>
+</html>
