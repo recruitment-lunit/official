@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lunit — For Interviewee</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
+  :root { --blue:#00C2FF; --black:#0a0a0a; --gray:#888; --light:#f7f8fa; --border:#e8e8e8; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { font-family:'Inter','Apple SD Gothic Neo',sans-serif; background:#fff; color:var(--black); }
+
+  /* HEADER */
+  header {
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background:rgba(255,255,255,0.95); backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 24px; height:64px;
+  }
+  .logo { font-size:18px; font-weight:900; letter-spacing:3px; color:var(--black); text-decoration:none; }
+  .badge {
+    font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+    background:var(--blue); color:#000; padding:4px 12px; border-radius:20px;
+    white-space:nowrap;
+  }
+
+  /* HERO */
+  .hero {
+    margin-top:64px; background:var(--black); padding:72px 24px 64px;
+    position:relative; overflow:hidden;
+  }
+  .hero::before {
+    content:''; position:absolute; top:-100px; right:-100px;
+    width:400px; height:400px;
+    background:radial-gradient(circle,rgba(0,194,255,.15) 0%,transparent 70%);
+    pointer-events:none;
+  }
+  .hero h1 { font-size:clamp(32px,8vw,64px); font-weight:900; color:#fff; line-height:1.1; margin-bottom:12px; letter-spacing:-1px; }
+  .hero-sub { font-size:15px; color:#6a8ca8; margin-top:16px; line-height:1.7; }
+  .hero-divider { width:40px; height:3px; background:var(--blue); margin:28px 0; }
+  .hero-desc { font-size:13px; color:#aaa; line-height:1.8; max-width:480px; }
+
+  /* SECTION */
+  section { padding:64px 24px; }
+  section:nth-child(even) { background:var(--light); }
+  .section-header { margin-bottom:36px; }
+  .section-label { font-size:11px; font-weight:700; letter-spacing:3px; color:var(--blue); text-transform:uppercase; margin-bottom:12px; }
+  .section-title { font-size:24px; font-weight:800; color:var(--black); line-height:1.2; }
+  .section-title-en { font-size:13px; font-weight:400; color:var(--gray); margin-top:6px; }
+
+  /* FAQ */
+  .faq-list { display:flex; flex-direction:column; gap:14px; }
+  .faq-item {
+    background:#fff; border-radius:16px; padding:24px;
+    border:1.5px solid var(--border);
+    display:flex; gap:16px; align-items:flex-start;
+    transition:border-color .2s, transform .2s;
+  }
+  .faq-item:hover { border-color:var(--blue); transform:translateY(-2px); }
+  .faq-icon {
+    width:38px; height:38px; background:rgba(0,194,255,.1);
+    border-radius:10px; display:flex; align-items:center; justify-content:center;
+    font-size:17px; flex-shrink:0;
+  }
+  .faq-text .ko { font-size:14px; font-weight:600; color:var(--black); line-height:1.6; }
+  .faq-text .en { font-size:13px; color:var(--gray); line-height:1.7; margin-top:5px; }
+
+  /* VIDEOS */
+  .video-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+  @media(max-width:600px){ .video-grid { grid-template-columns:1fr; } }
+  .video-wrap {
+    border-radius:16px; overflow:hidden;
+    border:1.5px solid var(--border);
+    aspect-ratio:16/9; background:var(--black);
+  }
+  .video-wrap iframe { width:100%; height:100%; display:block; border:none; }
+
+  /* EXPLORE CARDS */
+  .cards-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px; }
+  @media(max-width:600px){ .cards-grid { grid-template-columns:1fr; } }
+
+  .explore-card {
+    border-radius:20px; overflow:hidden;
+    border:1.5px solid var(--border);
+    text-decoration:none; color:inherit;
+    display:flex; flex-direction:column;
+    transition:border-color .2s, transform .2s;
+  }
+  .explore-card:hover { border-color:var(--blue); transform:translateY(-4px); }
+  .card-top {
+    background:var(--black); padding:28px 24px;
+    position:relative; overflow:hidden; flex:1;
+  }
+  .card-top::after {
+    content:''; position:absolute; bottom:-40px; right:-40px;
+    width:130px; height:130px;
+    background:radial-gradient(circle,rgba(0,194,255,.2) 0%,transparent 70%);
+  }
+  .card-icon { font-size:32px; margin-bottom:14px; display:block; }
+  .card-title { font-size:17px; font-weight:800; color:#fff; margin-bottom:8px; }
+  .card-desc { font-size:13px; color:#6a8ca8; line-height:1.6; }
+  .card-bottom {
+    background:#fff; padding:14px 24px;
+    display:flex; align-items:center; justify-content:flex-end;
+    border-top:1px solid var(--border);
+  }
+  .card-arrow { font-size:16px; color:var(--blue); }
+
+  /* FOOTER */
+  footer {
+    background:var(--black); padding:32px 24px;
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
+  }
+  footer .f-logo { font-size:16px; font-weight:900; letter-spacing:3px; color:#fff; }
+  footer p { font-size:12px; color:#555; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a class="logo" href="#">LUNIT</a>
+  <span class="badge">For Interviewee</span>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>안녕하세요!</h1>
+  <div class="hero-sub">Welcome to Lunit</div>
+  <div class="hero-divider"></div>
+  <p class="hero-desc">
+    루닛에 오신 것을 환영합니다.<br>
+    심심한 대기 시간, 둘러볼 만한 콘텐츠를 준비했어요.<br>
+    <span style="color:#556a7a">We've prepared some content for you<br>to browse through while you wait.</span>
+  </p>
+</div>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-header">
+    <div class="section-label">FAQ</div>
+    <div class="section-title">자주 묻는 사항</div>
+    <div class="section-title-en">Frequently Asked Questions</div>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-icon">🚻</div>
+      <div class="faq-text">
+        <div class="ko">화장실은 복도에 있습니다. 자유롭게 이용해주세요.</div>
+        <div class="en">The restroom is located in the hallway. Please feel free to use it.</div>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-icon">👋</div>
+      <div class="faq-text">
+        <div class="ko">면접 종료 후에는 귀가해주시면 됩니다.</div>
+        <div class="en">You may leave after the interview is over.</div>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-icon">📧</div>
+      <div class="faq-text">
+        <div class="ko">면접 결과는 1~2주 내에 이메일로 안내드리고 있습니다.</div>
+        <div class="en">The results of the interview will be notified to you via email within 1–2 weeks.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPLORE -->
+<section id="explore">
+  <div class="section-header">
+    <div class="section-label">Explore</div>
+    <div class="section-title">루닛 둘러보기</div>
+    <div class="section-title-en">Learn More About Lunit</div>
+  </div>
+
+  <!-- 영상 먼저 -->
+  <div class="video-grid">
+    <div class="video-wrap">
+      <iframe src="https://www.youtube.com/embed/lFna3e4UjaA" title="Lunit Video 1"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+    </div>
+    <div class="video-wrap">
+      <iframe src="https://www.youtube.com/embed/EzSJazmA-gY" title="Lunit Video 2"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <!-- 카드 아래 -->
+  <div class="cards-grid">
+    <a class="explore-card" href="https://www.lunit.io" target="_blank">
+      <div class="card-top">
+        <span class="card-icon">🏢</span>
+        <div class="card-title">Lunit 소개</div>
+        <div class="card-desc">루닛은 어떤 회사일까요?<br>AI로 암을 정복합니다.<br><span style="color:#aaa">We conquer cancer with AI.</span></div>
+      </div>
+      <div class="card-bottom">
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+    <a class="explore-card" href="https://medium.com/lunit" target="_blank">
+      <div class="card-top">
+        <span class="card-icon">💡</span>
+        <div class="card-title">Team Blog</div>
+        <div class="card-desc">루니션들의 인사이트 모음집<br><span style="color:#aaa">Insights and stories from the Lunit team.</span></div>
+      </div>
+      <div class="card-bottom">
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-logo">LUNIT</div>
+  <p>© 2025 Lunit Inc. · AI-Powered Cancer Care</p>
+</footer>
+
+</body>
+</html>
