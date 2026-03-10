@@ -116,7 +116,25 @@
   }
   .step:nth-child(even) { direction:rtl; }
   .step:nth-child(even) > * { direction:ltr; }
-  .step-img { width:100%; height:280px; object-fit:cover; display:block; }
+
+  /* 이미지 확대 효과 */
+  .step-img-wrap {
+    overflow:hidden; cursor:zoom-in; position:relative;
+  }
+  .step-img-wrap::after {
+    content:'🔍';
+    position:absolute; bottom:12px; right:12px;
+    background:rgba(0,0,0,0.5); color:#fff;
+    font-size:14px; padding:6px 8px; border-radius:8px;
+    opacity:0; transition:opacity .2s;
+  }
+  .step-img-wrap:hover::after { opacity:1; }
+  .step-img {
+    width:100%; height:280px; object-fit:cover; display:block;
+    transition:transform .4s ease;
+  }
+  .step-img-wrap:hover .step-img { transform:scale(1.05); }
+
   .step-info {
     padding:36px 40px; display:flex; flex-direction:column; justify-content:center;
     background:#fff; gap:12px;
@@ -133,6 +151,33 @@
     .step-img { height:220px; }
     .step-info { padding:24px; }
   }
+
+  /* 라이트박스 */
+  .lightbox {
+    display:none; position:fixed; inset:0; z-index:999;
+    background:rgba(0,0,0,0.92); backdrop-filter:blur(8px);
+    align-items:center; justify-content:center;
+    cursor:zoom-out;
+  }
+  .lightbox.open { display:flex; }
+  .lightbox img {
+    max-width:92vw; max-height:88vh;
+    object-fit:contain; border-radius:12px;
+    box-shadow:0 20px 60px rgba(0,0,0,0.5);
+    animation:zoomIn .25s ease;
+  }
+  @keyframes zoomIn {
+    from { opacity:0; transform:scale(0.9); }
+    to   { opacity:1; transform:scale(1); }
+  }
+  .lightbox-close {
+    position:fixed; top:20px; right:24px;
+    background:rgba(255,255,255,0.1); border:none; color:#fff;
+    font-size:24px; width:44px; height:44px; border-radius:50%;
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition:background .2s;
+  }
+  .lightbox-close:hover { background:rgba(255,255,255,0.2); }
 
   .parking-card {
     background:#fff; border-radius:16px; padding:32px;
@@ -191,6 +236,12 @@
 </style>
 </head>
 <body>
+
+<!-- 라이트박스 -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
 
 <header>
   <a class="logo" href="#">LUNIT</a>
@@ -286,7 +337,9 @@
   <div id="tab-subway" class="tab-pane active">
     <div class="steps">
       <div class="step">
-        <img class="step-img" src="Img/subway1.webp" alt="강남역 출구">
+        <div class="step-img-wrap" onclick="openLightbox('Img/subway1.webp')">
+          <img class="step-img" src="Img/subway1.webp" alt="강남역 출구">
+        </div>
         <div class="step-info">
           <div class="step-num">01</div>
           <div class="step-ko">강남역 신분당선 3번 또는 4번 출구로 나와 크리스피크림 도넛 방향으로 직진해 주세요.<br>건물 외부 조형물(고양이 형상)이 보입니다.</div>
@@ -294,7 +347,9 @@
         </div>
       </div>
       <div class="step">
-        <img class="step-img" src="Img/subway2.webp" alt="건물 방향">
+        <div class="step-img-wrap" onclick="openLightbox('Img/subway2.webp')">
+          <img class="step-img" src="Img/subway2.webp" alt="건물 방향">
+        </div>
         <div class="step-info">
           <div class="step-num">02</div>
           <div class="step-ko">조형물이 있는 건물(K-Square 2) 입구로 들어오세요.</div>
@@ -302,7 +357,9 @@
         </div>
       </div>
       <div class="step">
-        <img class="step-img" src="Img/subway4.webp" alt="엘리베이터">
+        <div class="step-img-wrap" onclick="openLightbox('Img/subway4.webp')">
+          <img class="step-img" src="Img/subway4.webp" alt="엘리베이터">
+        </div>
         <div class="step-info">
           <div class="step-num">03</div>
           <div class="step-ko"><strong style="color:var(--blue)">하늘색으로 표시된 엘리베이터 2대</strong>를 이용해 5층으로 올라와 주세요.</div>
@@ -318,7 +375,9 @@
   <div id="tab-car" class="tab-pane">
     <div class="steps">
       <div class="step">
-        <img class="step-img" src="Img/car1.webp" alt="주차장 입구">
+        <div class="step-img-wrap" onclick="openLightbox('Img/car1.webp')">
+          <img class="step-img" src="Img/car1.webp" alt="주차장 입구">
+        </div>
         <div class="step-info">
           <div class="step-num">01</div>
           <div class="step-ko">주차 후 옆 출입문을 통해 건물 내부로 들어와 주세요.</div>
@@ -326,15 +385,19 @@
         </div>
       </div>
       <div class="step">
-        <img class="step-img" src="Img/car3.webp" alt="주차 후 출구">
+        <div class="step-img-wrap" onclick="openLightbox('Img/car3.webp')">
+          <img class="step-img" src="Img/car3.webp" alt="주차 후 출구">
+        </div>
         <div class="step-info">
           <div class="step-num">02</div>
-          <div class="step-ko">반드시 오른쪽으로 꺾었을 때 보이는 엘레베이터를 이용해주세요.</div>
+          <div class="step-ko">반드시 오른쪽으로 꺾었을 때 보이는 엘리베이터를 이용해 주세요.</div>
           <div class="step-en">Please use the elevator around the right corner.</div>
         </div>
       </div>
       <div class="step">
-        <img class="step-img" src="Img/car4.webp" alt="엘리베이터">
+        <div class="step-img-wrap" onclick="openLightbox('Img/car4.webp')">
+          <img class="step-img" src="Img/car4.webp" alt="엘리베이터">
+        </div>
         <div class="step-info">
           <div class="step-num">03</div>
           <div class="step-ko"><strong style="color:var(--blue)">하늘색으로 표시된 엘리베이터 2대</strong>만 5층으로 운행합니다.<br>해당 엘리베이터를 이용해 주세요.</div>
@@ -416,6 +479,21 @@
     document.getElementById('tab-' + name).classList.add('active');
     el.classList.add('active');
   }
+
+  function openLightbox(src) {
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeLightbox();
+  });
 </script>
 </body>
 </html>
