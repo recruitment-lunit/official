@@ -18,7 +18,8 @@
     display:flex; align-items:center; justify-content:space-between;
     padding:0 48px; height:64px;
   }
-  .logo { font-size:18px; font-weight:900; letter-spacing:3px; color:var(--black); text-decoration:none; }
+  .logo-link { display:inline-flex; align-items:center; text-decoration:none; }
+  .logo-img { height:28px; width:auto; display:block; }
   .header-tag { font-size:11px; font-weight:600; color:var(--gray); letter-spacing:2px; text-transform:uppercase; }
 
   .hero {
@@ -117,7 +118,6 @@
   .step:nth-child(even) { direction:rtl; }
   .step:nth-child(even) > * { direction:ltr; }
 
-  /* 이미지 확대 효과 */
   .step-img-wrap {
     overflow:hidden; cursor:zoom-in; position:relative;
   }
@@ -152,7 +152,6 @@
     .step-info { padding:24px; }
   }
 
-  /* 라이트박스 */
   .lightbox {
     display:none; position:fixed; inset:0; z-index:999;
     background:rgba(0,0,0,0.92); backdrop-filter:blur(8px);
@@ -224,7 +223,7 @@
     background:var(--black); padding:40px 48px;
     display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;
   }
-  footer .f-logo { font-size:16px; font-weight:900; letter-spacing:3px; color:#fff; }
+  .footer-logo-img { height:24px; width:auto; display:block; filter:brightness(0) invert(1); }
   footer p { font-size:12px; color:#555; }
 
   @media(max-width:768px){
@@ -237,14 +236,15 @@
 </head>
 <body>
 
-<!-- 라이트박스 -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <button class="lightbox-close" onclick="closeLightbox()">✕</button>
   <img id="lightbox-img" src="" alt="">
 </div>
 
 <header>
-  <a class="logo" href="#">LUNIT</a>
+  <a class="logo-link" href="https://www.lunit.io/ko/careers/" target="_blank" rel="noopener noreferrer">
+    <img class="logo-img" src="Img/Lunit_Logo_RGB_Black.png" alt="Lunit">
+  </a>
   <span class="header-tag">How to get to Lunit's office</span>
 </header>
 
@@ -468,7 +468,9 @@
 </section>
 
 <footer>
-  <div class="f-logo">LUNIT</div>
+  <a href="https://www.lunit.io/ko/careers/" target="_blank" rel="noopener noreferrer">
+    <img class="footer-logo-img" src="Img/Lunit_Logo_RGB_Black.png" alt="Lunit">
+  </a>
   <p>© 2025 Lunit Inc. · AI-Powered Cancer Care</p>
 </footer>
 
