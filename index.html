@@ -32,7 +32,15 @@
     background:radial-gradient(circle,rgba(0,194,255,.15) 0%,transparent 70%);
     pointer-events:none;
   }
+  .hero-title-row { display:flex; align-items:flex-end; gap:20px; flex-wrap:wrap; position:relative; z-index:1; }
   .hero h1 { font-size:clamp(36px,6vw,64px); font-weight:900; color:#fff; line-height:1.1; margin-bottom:12px; letter-spacing:-1px; }
+  .hero-office-link {
+    display:inline-flex; align-items:center; gap:6px; margin-bottom:18px;
+    padding:10px 14px; border:1px solid rgba(0,194,255,.42); border-radius:8px;
+    color:var(--blue); text-decoration:none; font-size:13px; font-weight:800;
+    background:rgba(0,194,255,.08); transition:background .2s, border-color .2s;
+  }
+  .hero-office-link:hover { background:rgba(0,194,255,.16); border-color:var(--blue); }
   .hero-sub { font-size:15px; color:#6a8ca8; margin-top:16px; line-height:1.7; }
   .hero-divider { width:40px; height:3px; background:var(--blue); margin:32px 0; }
   .hero-desc { font-size:13px; color:#aaa; line-height:1.8; max-width:480px; }
@@ -229,6 +237,8 @@
   @media(max-width:768px){
     header { padding:0 24px; }
     .hero { padding:80px 24px 60px; }
+    .hero-title-row { align-items:flex-start; flex-direction:column; gap:2px; }
+    .hero-office-link { margin-bottom:4px; }
     section { padding:60px 24px; }
     footer { padding:32px 24px; }
   }
@@ -249,7 +259,10 @@
 </header>
 
 <div class="hero">
-  <h1>오시는 길</h1>
+  <div class="hero-title-row">
+    <h1>오시는 길</h1>
+    <a class="hero-office-link" href="lunit_office_preview.html">오피스 둘러보기 · Office Preview →</a>
+  </div>
   <div class="hero-sub">Directions</div>
   <div class="hero-divider"></div>
   <p class="hero-desc">
@@ -465,6 +478,7 @@
       <span style="color:#aaa">Actual parking fees may differ. Please double-check before visiting.</span></p>
     </div>
   </div>
+
 </section>
 
 <footer>
